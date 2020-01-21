@@ -9,7 +9,8 @@ const app = props => {
       { name: 'Manu', age: 29 },
       { name: 'Stephanie', age: 26 },
     ],
-    otherState: 'some other value'
+    otherState: 'some other value',
+    showPersons: false
   });
 
   const switchNameHandler = (Newname) => {
@@ -23,18 +24,43 @@ const app = props => {
     })
   }
 
-  console.log('->', personsState);
+  const nameChangedHandler = (event) => {
+    setPersonsState({
+      persons: [
+        { name: event.target.value, age: 29 },
+        { name: 'Manu', age: 30 },
+        { name: 'Stephanie', age: 27 },
+      ],
+      otherState: personsState.otherState
+    })
+  }
+
+  const togglePersonsHandler = () => {
+    const doesShow = personsState.showPersons;
+    setPersonsState({
+      persons: [
+        { name: 'Max', age: 28 },
+        { name: 'Manu', age: 29 },
+        { name: 'Stephanie', age: 26 },
+      ],
+      otherState: 'some other value',
+      showPersons: !doesShow
+    });
+  }
 
   return (
     <div className="App">
       <h1>Hello World!</h1>
-      <button onClick={() => switchNameHandler("Diego!")}>SwitchName</button>
-      <Person 
-        name={personsState.persons[0].name} 
-        age={personsState.persons[0].age}
-        click={() => switchNameHandler("Diego!")}>Children</Person>
-      <Person name={personsState.persons[1].name} age={personsState.persons[1].age} />
-      <Person name={personsState.persons[2].name} age={personsState.persons[2].age} />
+      <button onClick={togglePersonsHandler}>Toggle Persons</button>
+      {personsState.showPersons ? <div>
+        <Person
+          name={personsState.persons[0].name}
+          age={personsState.persons[0].age}
+          click={() => switchNameHandler("Diego!")}
+          changed={nameChangedHandler}>Children</Person>
+        <Person name={personsState.persons[1].name} age={personsState.persons[1].age} />
+        <Person name={personsState.persons[2].name} age={personsState.persons[2].age} />
+      </div> : null}
     </div>
   );
 }
