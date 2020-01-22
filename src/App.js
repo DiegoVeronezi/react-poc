@@ -8,58 +8,53 @@ const app = props => {
       { name: 'Max', age: 28 },
       { name: 'Manu', age: 29 },
       { name: 'Stephanie', age: 26 },
-    ],
-    otherState: 'some other value',
-    showPersons: false
+    ]
   });
 
-  const switchNameHandler = (Newname) => {
+  const [showPersonState, setShowPersonState] = useState(false);
+
+  const deletePersonHandler = (personIndex) => {
+    const persons = [...personsState.persons];
+    persons.splice(personIndex, 1);
     setPersonsState({
-      persons: [
-        { name: Newname, age: 29 },
-        { name: 'Yasmim', age: 30 },
-        { name: 'Giordana', age: 27 },
-      ],
-      otherState: personsState.otherState
-    })
+      persons: persons
+    });
   }
 
-  const nameChangedHandler = (event) => {
-    setPersonsState({
-      persons: [
-        { name: event.target.value, age: 29 },
-        { name: 'Manu', age: 30 },
-        { name: 'Stephanie', age: 27 },
-      ],
-      otherState: personsState.otherState
-    })
+  const nameChangedHandler = (event, index) => {
+    const personIndex = index;
+    console.log('index', personIndex);
+
+    const person = {
+      ...personsState[personIndex]
+    };
+
+    person.name = event.target.value;
+
+    const persons = [...personsState.persons];
+    persons[personIndex] = person;
+
+    setPersonsState({persons: persons});
   }
 
   const togglePersonsHandler = () => {
-    const doesShow = personsState.showPersons;
-    setPersonsState({
-      persons: [
-        { name: 'Max', age: 28 },
-        { name: 'Manu', age: 29 },
-        { name: 'Stephanie', age: 26 },
-      ],
-      otherState: 'some other value',
-      showPersons: !doesShow
-    });
+    const doesShow = showPersonState;
+    setShowPersonState(!doesShow);
   }
 
   let persons = null;
 
-  if (personsState.showPersons) {
+  if (showPersonState) {
     persons = (
       <div>
-        <Person
-          name={personsState.persons[0].name}
-          age={personsState.persons[0].age}
-          click={() => switchNameHandler("Diego!")}
-          changed={nameChangedHandler}>Children</Person>
-        <Person name={personsState.persons[1].name} age={personsState.persons[1].age} />
-        <Person name={personsState.persons[2].name} age={personsState.persons[2].age} />
+        {personsState.persons.map((person, index) => {
+          return <Person
+          click={() => deletePersonHandler(index)}
+          name={person.name}
+          age={person.age}
+          key={index}
+          changed={(event) => nameChangedHandler(event, index)} />
+        })}
       </div>
     )
   }
