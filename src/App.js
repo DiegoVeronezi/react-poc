@@ -3,6 +3,15 @@ import './App.css';
 import Person from './Person/Person';
 
 const app = props => {
+  const style = {
+    backgroundColor: 'green',
+    color: 'white',
+    font: 'inherit',
+    border: '1px solid blue',
+    padding: '8px',
+    cursor: 'pointer'
+  };
+
   const [personsState, setPersonsState] = useState({
     persons: [
       { name: 'Max', age: 28 },
@@ -57,12 +66,22 @@ const app = props => {
         })}
       </div>
     )
+
+    style.backgroundColor = 'red';
+  }
+
+  const classes = [];
+  if (personsState.persons.length <=2) {
+    classes.push('red');
+  }
+  if (personsState.persons.length <=1) {
+    classes.push('bold');
   }
 
   return (
     <div className="App">
-      <h1>Hello World!</h1>
-      <button onClick={togglePersonsHandler}>Toggle Persons</button>
+      <p className={classes.join(' ')}>Hello World!</p>
+      <button style={style} onClick={togglePersonsHandler}>Toggle Persons</button>
       {persons}
     </div>
   );
